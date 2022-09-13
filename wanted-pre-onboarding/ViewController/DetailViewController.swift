@@ -28,15 +28,18 @@ class DetailViewController: UIViewController {
 
         if let detailWeather = detailWeather {
         weatherNameLabel.text = detailWeather.weatherName
-        weatherIconImage.image = UIImage(named: "")
+            guard let icon = detailWeather.weatherIcon, let url = URL(string: "https://openweathermap.org/img/wn/\(icon)@2x.png") else { return }
+            let data = try! Data(contentsOf: url)
+            weatherIconImage.image = UIImage(data: data)
         cityNameLabel.text = detailWeather.citiName
-        currentHumidityLabel.text = detailWeather.currentHumidity
-        minTemperatureLabel.text = "\(detailWeather.minTemperature)"
-        maxTemperatureLabel.text = "\(detailWeather.maxTemperature)"
-        sensibleTemperatureLabel.text = detailWeather.sensibleTemperature
-        currentHumidityLabel.text = detailWeather.currentHumidity
-        pressureLabel.text = detailWeather.pressure
-        windLabel.text = "\(detailWeather.wind)"
+            currentHumidityLabel.text = detailWeather.currentHumidity
+            minTemperatureLabel.text = "\(detailWeather.minTemperature)"
+            maxTemperatureLabel.text = "\(detailWeather.maxTemperature)"
+            sensibleTemperatureLabel.text = detailWeather.sensibleTemperature
+            currentHumidityLabel.text = detailWeather.currentHumidity
+            currentTemperatureLabel.text = detailWeather.currentTemperature
+            pressureLabel.text = detailWeather.pressure
+            windLabel.text = "\(detailWeather.wind)"
         }
     }
 }

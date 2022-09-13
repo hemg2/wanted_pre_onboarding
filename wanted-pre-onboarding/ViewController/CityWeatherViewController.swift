@@ -11,11 +11,21 @@ class CityWeatherViewController: UIViewController {
 
     @IBOutlet weak var listTabelView: UITableView!
     
-    var cityWeathers: [CityInfo] = [CityInfo.init(name: "부산", icon: "04d", temperature: 21.1, humidity: 22.2, weatherName: "윤아"), CityInfo.init(name: "서울", icon: "04d", temperature: 31.1, humidity: 32.1, weatherName: "태연"), CityInfo.init(name: "대구", icon: "04d", temperature: 41.1, humidity: 42.1, weatherName: "티파니"), CityInfo.init(name: "대전", icon: "04d", temperature: 51.1, humidity: 52.1, weatherName: "수영")]
+    var cityWeathers: [CityInfo] = []
+    var mainDetail: [MainWeather] = []
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let cityNames = ["busan", "seoul", "daegu", "chuncheon", "cheongju", "cheonan", "jeju", "jeonju",
+                         "iksan", "ulsan", "sunchun", "suigen", "sogcho", "suisan", "moppo", "deajeon", "kunsan", "Gumi", "gongju", "gwangju"]
+        for cityName in cityNames {
+            WeathersApi().callAPI(cityName: cityName) { data in
+                self.cityWeathers.append(CityInfo(name: cityName, icon: data.weather.first?.icon, temperature: data.main.temp, humidity: data.main.humidity, weatherName: data.weather.first?.description))
+                self.mainDetail.append(data)
+                self.listTabelView.reloadData()
+            }
+        }
+        
     }
     
     
@@ -40,9 +50,36 @@ extension CityWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let detailViewController = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else { return }
-        detailViewController.detailWeather = DetailWeather.init(weatherIcon: "흐림", weatherName: "회기", citiName: "정자", currentTemperature: "11", minTemperature: 11.1, maxTemperature: 11.2, sensibleTemperature: "11.3", currentHumidity: "11.4", pressure: "11.5", wind: 11.6)
+      
         
+    
+
+       
+            
+            let respone = mainDetail[indexPath.row]
+        detailViewController.detailWeather = DetailWeather.init(weatherIcon: respone.weather.first?.icon, weatherName: respone.weather.first?.description, citiName:respone.name, currentTemperature: "\(respone.main.temp.temperatureString)", minTemperature: respone.main.temp_min.temperatureString, maxTemperature: respone.main.temp_max.temperatureString, sensibleTemperature: "\(respone.main.feels_like.temperatureString)", currentHumidity: "\(respone.main.humidity)", pressure: "\(respone.main.pressure)", wind: respone.wind.speed)
+       
         self.navigationController?.pushViewController(detailViewController, animated: true)
+
     }
      
+}
+
+
+
+
+fileprivate let temperatureFormatter: MeasurementFormatter = {
+    let f = MeasurementFormatter()
+    f.locale = Locale(identifier: "ko_kr")
+    f.numberFormatter.maximumFractionDigits = 1
+    f.unitOptions = .temperatureWithoutUnit
+    return f
+}()
+
+
+extension Double {
+    var temperatureString: String {
+        let temp = Measurement<UnitTemperature>(value: self, unit: .celsius)
+        return temperatureFormatter.string(from: temp)
+    }
 }

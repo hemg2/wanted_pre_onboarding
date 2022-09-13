@@ -22,8 +22,8 @@ class FirstTableViewCell: UITableViewCell {
         weatherNameLabel.text = model.weatherName
         currentTemperatureLabel.text = "\(model.temperature)"
         
-        let url = URL(string: "https://openweathermap.org/img/wn/\(model.icon)@2x.png")
-        let data = try! Data(contentsOf: url!)
+        guard let icon = model.icon, let url = URL(string: "https://openweathermap.org/img/wn/\(icon)@2x.png") else { return }
+        let data = try! Data(contentsOf: url)
         weatherIconImage.image = UIImage(data: data)
     }
     
