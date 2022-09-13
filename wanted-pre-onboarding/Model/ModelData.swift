@@ -14,6 +14,17 @@ struct CityInfo {
     let temperature: Double
     let humidity: Double
     let weatherName: String
-    
-    
+}
+
+struct DetailWeather {
+    let weatherIcon: String
+    let weatherName: String
+    let citiName: String
+    let currentTemperature: String
+    let minTemperature: Double
+    let maxTemperature: Double
+    let sensibleTemperature: String
+    let currentHumidity: String
+    let pressure: String
+    let wind: Double
 }

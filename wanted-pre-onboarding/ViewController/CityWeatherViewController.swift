@@ -11,14 +11,14 @@ class CityWeatherViewController: UIViewController {
 
     @IBOutlet weak var listTabelView: UITableView!
     
-    var cityWeathers: [CityInfo] = [CityInfo.init(name: "부산", icon: "눈", temperature: 21.1, humidity: 22.2, weatherName: "윤아"), CityInfo.init(name: "서울", icon: "비", temperature: 31.1, humidity: 32.1, weatherName: "태연"), CityInfo.init(name: "대구", icon: "맑음", temperature: 41.1, humidity: 42.1, weatherName: "티파니"), CityInfo.init(name: "대전", icon: "흐림", temperature: 51.1, humidity: 52.1, weatherName: "수영")]
+    var cityWeathers: [CityInfo] = [CityInfo.init(name: "부산", icon: "04d", temperature: 21.1, humidity: 22.2, weatherName: "윤아"), CityInfo.init(name: "서울", icon: "04d", temperature: 31.1, humidity: 32.1, weatherName: "태연"), CityInfo.init(name: "대구", icon: "04d", temperature: 41.1, humidity: 42.1, weatherName: "티파니"), CityInfo.init(name: "대전", icon: "04d", temperature: 51.1, humidity: 52.1, weatherName: "수영")]
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-      
     }
+    
+    
 }
 
 
@@ -32,18 +32,17 @@ extension CityWeatherViewController: UITableViewDelegate, UITableViewDataSource 
             return UITableViewCell()
         }
         let cityInfo = cityWeathers[indexPath.row]
-        cityCell.citiNameLabel.text = cityInfo.name
-        cityCell.currentHumidityLabel.text = "\(cityInfo.humidity)"
-        cityCell.currentTemperatureLabel.text = "\(cityInfo.temperature)"
-        cityCell.weatherNameLabel.text = cityInfo.weatherName
-//        cityCell.weatherIconImage
+        cityCell.setModel(model: cityInfo)
         
-        
-        
-        
-        
+
         return cityCell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let detailViewController = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else { return }
+        detailViewController.detailWeather = DetailWeather.init(weatherIcon: "흐림", weatherName: "회기", citiName: "정자", currentTemperature: "11", minTemperature: 11.1, maxTemperature: 11.2, sensibleTemperature: "11.3", currentHumidity: "11.4", pressure: "11.5", wind: 11.6)
+        
+        self.navigationController?.pushViewController(detailViewController, animated: true)
+    }
      
 }
