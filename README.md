@@ -7,8 +7,8 @@
 
 
 ## secondViewController
-두번째 화면인 DetailViewController에서느 각 도시의 날씨를 상세하게 표현하고 있습니다.  
-api통신을 받아 값을 전달합니다.  
+두번째 화면인 **DetailViewController**에서느 각 도시의 날씨를 상세하게 표현하고 있습니다.  
+<u>api통신을 받아 값을 전달합니다.</u>
 
 
 
