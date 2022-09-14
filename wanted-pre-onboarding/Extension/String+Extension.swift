@@ -45,10 +45,10 @@ extension String {
             return "공주"
         } else if self == "gwangju" {
             return "광주"
-        } else if self == "seosan" {
-            return "서산"
-        } else {
+        } else if self == "busan" {
             return "부산"
+        } else {
+            return "서산"
         }
     }
 }

@@ -23,7 +23,7 @@ class CityWeatherViewController: UIViewController {
         loader.alpha = 1.0
         
         let cityNames = ["busan", "seoul", "daegu", "chuncheon", "cheongju", "cheonan", "jeju", "jeonju",
-                         "iksan", "ulsan", "sunchun", "suigen", "sogcho", "suisan", "moppo", "deajeon", "kunsan", "Gumi", "gongju", "gwangju", "seosan"]
+                         "iksan", "ulsan", "sunchun", "suigen", "sogcho", "suisan", "moppo", "deajeon", "kunsan", "Gumi", "gongju", "gwangju", "seosanCity"]
         for cityName in cityNames {
             WeathersApi().callAPI(cityName: cityName) { data in
                 self.cityWeathers.append(CityInfo(name: cityName.translate(), icon: data.weather.first?.icon, temperature: data.main.temp, humidity: data.main.humidity, weatherName: data.weather.first?.description))
