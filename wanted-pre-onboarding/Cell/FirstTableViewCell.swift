@@ -15,16 +15,14 @@ class FirstTableViewCell: UITableViewCell {
     @IBOutlet weak var weatherNameLabel: UILabel!
     @IBOutlet weak var weatherIconImage: UIImageView!
     
-    
     func setModel(model: CityInfo) {
         citiNameLabel.text = model.name
-        currentHumidityLabel.text = "\(model.humidity)"
-        weatherNameLabel.text = model.weatherName
-        currentTemperatureLabel.text = "\(model.temperature)"
+        currentHumidityLabel.text = "습 도:\(model.humidity)%"
+        weatherNameLabel.text = (model.weatherName)
+        currentTemperatureLabel.text = "현재 기온:\(model.temperature.temperatureString)"
         
         guard let icon = model.icon, let url = URL(string: "https://openweathermap.org/img/wn/\(icon)@2x.png") else { return }
-        let data = try! Data(contentsOf: url)
-        weatherIconImage.image = UIImage(data: data)
+        weatherIconImage.image = UIImage(data: ImageDownload.shared.download(url: url))
     }
     
     override func awakeFromNib() {

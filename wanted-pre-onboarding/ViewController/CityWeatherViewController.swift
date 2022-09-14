@@ -8,27 +8,36 @@
 import UIKit
 
 class CityWeatherViewController: UIViewController {
-
-    @IBOutlet weak var listTabelView: UITableView!
+    
+    @IBOutlet weak var listTableView: UITableView!
+    @IBOutlet weak var loader: UIActivityIndicatorView!
     
     var cityWeathers: [CityInfo] = []
     var mainDetail: [MainWeather] = []
-
+    var count : Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        listTableView.alpha = 0.0
+        loader.alpha = 1.0
+        
         let cityNames = ["busan", "seoul", "daegu", "chuncheon", "cheongju", "cheonan", "jeju", "jeonju",
-                         "iksan", "ulsan", "sunchun", "suigen", "sogcho", "suisan", "moppo", "deajeon", "kunsan", "Gumi", "gongju", "gwangju"]
+                         "iksan", "ulsan", "sunchun", "suigen", "sogcho", "suisan", "moppo", "deajeon", "kunsan", "Gumi", "gongju", "gwangju", "seosan"]
         for cityName in cityNames {
             WeathersApi().callAPI(cityName: cityName) { data in
-                self.cityWeathers.append(CityInfo(name: cityName, icon: data.weather.first?.icon, temperature: data.main.temp, humidity: data.main.humidity, weatherName: data.weather.first?.description))
+                self.cityWeathers.append(CityInfo(name: cityName.translate(), icon: data.weather.first?.icon, temperature: data.main.temp, humidity: data.main.humidity, weatherName: data.weather.first?.description))
                 self.mainDetail.append(data)
-                self.listTabelView.reloadData()
+                self.listTableView.reloadData()
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.listTableView
+                        .alpha = 1.0
+                    self.loader.alpha = 0.0
+                }
             }
         }
-        
     }
-    
-    
 }
 
 
@@ -44,25 +53,17 @@ extension CityWeatherViewController: UITableViewDelegate, UITableViewDataSource 
         let cityInfo = cityWeathers[indexPath.row]
         cityCell.setModel(model: cityInfo)
         
-
         return cityCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let detailViewController = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else { return }
-      
         
-    
-
-       
-            
-            let respone = mainDetail[indexPath.row]
+        let respone = mainDetail[indexPath.row]
         detailViewController.detailWeather = DetailWeather.init(weatherIcon: respone.weather.first?.icon, weatherName: respone.weather.first?.description, citiName:respone.name, currentTemperature: "\(respone.main.temp.temperatureString)", minTemperature: respone.main.temp_min.temperatureString, maxTemperature: respone.main.temp_max.temperatureString, sensibleTemperature: "\(respone.main.feels_like.temperatureString)", currentHumidity: "\(respone.main.humidity)", pressure: "\(respone.main.pressure)", wind: respone.wind.speed)
-       
+        
         self.navigationController?.pushViewController(detailViewController, animated: true)
-
     }
-     
 }
 
 
